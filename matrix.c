@@ -83,9 +83,30 @@ Matrix *Matrix_create_random(int rows){
     srand(time(NULL));
     for (i=0;i<d1;i++){
         for (j=0;j<d2;j++){
-            *p =rand()%5;
+            *p =rand()%2+1;
             p++;
         }
+    }
+    return(m);
+}
+
+Matrix *Matrix_create_orthonormal(int rows){
+    Matrix *m=Matrix_create(rows,rows);
+    int i,j,d1=m->rows, d2=m->cols;
+    double *p=m->data;
+    srand(time(NULL));
+    int index = 3;
+    printf("index %d\n", index);
+    for (i=0;i<d1;i++){
+        for (j=0;j<d2;j++){
+            if(j==index){
+                *p = 1;
+            }else{
+                *p = 0;
+            }
+            p++;
+        }
+        index = (index+1)%rows;
     }
     return(m);
 }
@@ -94,6 +115,11 @@ Matrix *Matrix_create_random(int rows){
 Matrix *Matrix_create_random_SDP(int rows){
     Matrix *mr = Matrix_create_random(rows);
     Matrix *res = Matrix_product(mr,Matrix_transpose(mr));
+
+    /*Matrix *mortho = Matrix_create_random(rows);//Matrix_create_orthonormal(rows);
+    Matrix *mdiag = Matrix_create_random_diag(rows);
+    Matrix *res = Matrix_product(mortho, Matrix_product(mdiag,Matrix_transpose(mortho)));*/
+
     return(res);
 }
 

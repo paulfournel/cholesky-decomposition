@@ -90,7 +90,7 @@ void *calculSommeAutre(void *arguments)
 
 
 Matrix *cholesky2Para(Matrix *mat){
-    int threadNumber = 2;
+    int threadNumber = 4;
     int i,j,k;
     int n = mat->rows;
 
@@ -103,7 +103,6 @@ Matrix *cholesky2Para(Matrix *mat){
         for(j=i;j<n; j++){
             double somme = 0;
             if(i==j){
-                printf("i=%d", i);
                 // On lance plusieurs threads
                 pthread_t threads[threadNumber];
                 int tn;
@@ -124,19 +123,15 @@ Matrix *cholesky2Para(Matrix *mat){
                     }
 
                 }
+
                 // On attend la fin de tous les threads.
                 for(tn=0;tn<threadNumber;tn++){
                     pthread_join(threads[i], NULL);
                 }
 
-                /*int somme2 = 0;
-                int kkk;
-                for(kkk=0; kkk<(i); kkk++){
-                    somme2 += Matrix_get(l,i,kkk) * Matrix_get(l,i,kkk);
-                }
-                printf("s1; %.2f, s2: %.2f\n", somme, somme2);*/
                 // On actualise l'élément de la matrice.
-                Matrix_set(l,i,j, sqrt(Matrix_get(mat,i,j)-somme));
+
+                Matrix_set(l,i,j, sqrt(Matrix_get(mat,i,i)-somme));
             }else{
                 // On lance plusieurs threads
                 pthread_t threads[threadNumber];
