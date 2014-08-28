@@ -17,3 +17,4 @@ TODO List:
 - Faire une fonction qui permet de tester la vitesse de chaque algorithme
 - Donner la possibilité de choisir le nombre de processeur à utiliser.
 - Faire un makefile
+- Nouvel algo avec http://www.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-29.pdf
