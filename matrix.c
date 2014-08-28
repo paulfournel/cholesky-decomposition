@@ -83,7 +83,7 @@ Matrix *Matrix_create_random(int rows){
     srand(time(NULL));
     for (i=0;i<d1;i++){
         for (j=0;j<d2;j++){
-            *p =rand()%2+1;
+            *p =rand()%4-2;
             p++;
         }
     }
@@ -115,7 +115,11 @@ Matrix *Matrix_create_orthonormal(int rows){
 Matrix *Matrix_create_random_SDP(int rows){
     Matrix *mr = Matrix_create_random(rows);
     Matrix *res = Matrix_product(mr,Matrix_transpose(mr));
-
+    if(Matrix_determinant(res)>0){
+        printf("C'est bon det=%f>0\n",Matrix_determinant(res));
+    }else{
+        printf("C'est pas bon det=%f>0\n",Matrix_determinant(res));
+    }
     /*Matrix *mortho = Matrix_create_random(rows);//Matrix_create_orthonormal(rows);
     Matrix *mdiag = Matrix_create_random_diag(rows);
     Matrix *res = Matrix_product(mortho, Matrix_product(mdiag,Matrix_transpose(mortho)));*/
