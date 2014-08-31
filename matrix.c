@@ -115,11 +115,11 @@ Matrix *Matrix_create_orthonormal(int rows){
 Matrix *Matrix_create_random_SDP(int rows){
     Matrix *mr = Matrix_create_random(rows);
     Matrix *res = Matrix_product(mr,Matrix_transpose(mr));
-    if(Matrix_determinant(res)>0){
+    /*if(Matrix_determinant(res)>0){
         printf("C'est bon det=%f>0\n",Matrix_determinant(res));
     }else{
         printf("C'est pas bon det=%f>0\n",Matrix_determinant(res));
-    }
+    }*/
     /*Matrix *mortho = Matrix_create_random(rows);//Matrix_create_orthonormal(rows);
     Matrix *mdiag = Matrix_create_random_diag(rows);
     Matrix *res = Matrix_product(mortho, Matrix_product(mdiag,Matrix_transpose(mortho)));*/
@@ -240,6 +240,24 @@ Matrix* Matrix_clone(Matrix *source){
     for (i=0;i<total;i++){
         *p=*sourcedata;
         p++;sourcedata++;
+    }
+    return(newmatrix);
+}
+
+//Paul Fournel
+Matrix* Matrix_clone_from_to(Matrix *source, int start, int end, int n, int m){
+    Matrix* newmatrix=Matrix_create(source->rows,source->cols);
+    int total=source->rows * source->cols;
+    int i;
+    double *p=newmatrix->data;
+    double *sourcedata=source->data;
+    for (i=0;i<end;i++){
+        if(sourcedata<start){
+            sourcedata++;
+        }else{
+            *p=*sourcedata;
+            p++;sourcedata++;
+        }
     }
     return(newmatrix);
 }
