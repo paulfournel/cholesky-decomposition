@@ -1,17 +1,20 @@
 Cholesky decomposition
 ======================
 
-En cours de dévelopement.
 
-Pour tester la version sans pthread:
-  changer dans le main.c la fonction cholesky1 à cholesky2Para
+Pour executer le programme sous un terminal Linux:
+--------------------------------------------------
+- gcc matrix.c  cholesky.c main.c -o cholesky -lpthread -lm
+- ./cholesky
   
 Bugs:
+-----
 
 - La fonction cholesky2Para marche 60% du temps et donne une erreur les autre fois. La source du bug est inconnue.
 
 
 TODO List:
+----------
 
 - Ajouter une mise en forme du menu plus sympa
 - Faire une fonction qui permet de tester la vitesse de chaque algorithme
