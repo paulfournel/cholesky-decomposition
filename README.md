@@ -24,5 +24,4 @@ Ensuite il suffit de naviguer dans le menu pour tester les différentes fonction
 ### TODO List:
 
 - Trouver un nouvel algo http://www.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-29.pdf
-- Possibilité de choisir le nombre de threads
 - ...
