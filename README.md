@@ -9,8 +9,8 @@ Ce projet a pour objectif de proposer une version parallèle de la décompositio
 Pour executer le programme sous un terminal Linux:
 
 ```
-- gcc matrix.c  cholesky.c main.c -o cholesky -lpthread -lm
-- ./cholesky
+gcc matrix.c  cholesky.c main.c -o cholesky -lpthread -lm
+./cholesky
 ```
 
 Ensuite il suffit de naviguer dans le menu pour tester les différentes fonctions.
