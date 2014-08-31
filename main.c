@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
 
 void user_input_test(){
     double d;
@@ -20,11 +21,11 @@ void user_input_test(){
     }
     printf("\nMatrix A\n");
     Matrix_dump(mat);
-    printf("\What algorithm should we use?\n\n 1. Normal\n 2. Parallel\n 3. Return to main\n");
+    printf("\What algorithm should we use?\n\n 1. Normal\n 2. Parallel (number of threads adapted to processor, possible segmentation fault)\n 3. Parallel (fixed number of threads, safe mode)\n 4. Return to main\n");
     int choice=-1;
     Matrix *m2;
 
-    while(choice<1 || choice>3){
+    while(choice<1 || choice>4){
         printf("\n>: ");
         scanf("%d", &choice);
         if(choice==1){
@@ -38,7 +39,9 @@ void user_input_test(){
             Matrix_dump(m2);
         }
         if(choice==3){
-            //do nothing
+            m2 = choleskyParaSafe(mat);
+            printf("\nMatrix L\n");
+            Matrix_dump(m2);
         }
     }
 
@@ -74,7 +77,7 @@ void random_matrix_test(){
     Matrix_dump(m1);
 
 
-    printf("\nWhat algorithm should we use?\n\n 1. Normal\n 2. Parallel\n 3. Return to main\n");
+    printf("\What algorithm should we use?\n\n 1. Normal\n 2. Parallel (number of threads adapted to processor, possible segmentation fault)\n 3. Parallel (fixed number of threads, safe mode)\n 4. Return to main\n");
 
     int choice;
 
@@ -93,7 +96,9 @@ void random_matrix_test(){
             Matrix_dump(m2);
         }
         if(choice==3){
-            //do nothing
+            m2 = choleskyParaSafe(m1);
+            printf("\nMatrix L\n");
+            Matrix_dump(m2);
         }
     }
 
@@ -142,10 +147,15 @@ void run_speed_test(){
     printf("Time taken %d seconds %d milliseconds", msec/1000, msec%1000);
 }
 
+
+
 int main()
 {
     // Ask user what to do
-
+       printf(" ---------------------------------------\n");
+      printf("|               Information\t\t|");
+    printf("\n|    You have %d processors available.\t|  \n|     Except if specified otherwise,\t|\n|        we will now use %d threads.\t|\n",sysconf(_SC_NPROCESSORS_ONLN),sysconf(_SC_NPROCESSORS_ONLN));
+    printf(" ---------------------------------------\n");
     int choice=-1;
     while(choice!=4){
         printf("\nWhat would you like to do?");
