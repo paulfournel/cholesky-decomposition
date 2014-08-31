@@ -18,6 +18,7 @@ Ensuite il suffit de naviguer dans le menu pour tester les différentes fonction
 ### Bugs:
 
 - La fonction cholesky2Para marche 60% du temps et donne une erreur les autre fois. La source du bug est inconnue.
+- Parfois une "segmentation fault" quand on utilise une boucle pour générer les threads.
 
 
 ### TODO List:
