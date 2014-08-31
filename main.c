@@ -73,7 +73,7 @@ void random_matrix_test(){
     printf("\n>: ");
     scanf("%d", &msize);
     printf("\nMatrice A created:\n");
-    Matrix *m1=Matrix_create_random_SDP(msize);//Matrix_create_sample();
+    Matrix *m1=Matrix_create_random_SDP(msize);
     Matrix_dump(m1);
 
 
@@ -123,11 +123,11 @@ void random_matrix_test(){
     }
 }
 
+// Test de comparaison
 void run_speed_test(){
     Matrix *m1 = Matrix_create_random_SDP(200);
 
     clock_t start = clock(), diff;
-    // Start test
     Matrix *m2 = cholesky1(m1);
 
 
@@ -137,7 +137,6 @@ void run_speed_test(){
     printf("Time taken %d seconds %d milliseconds", msec/1000, msec%1000);
 
     start = clock();
-    // Start test
     Matrix *m3 = cholesky2Para(m1);
 
 
@@ -151,9 +150,9 @@ void run_speed_test(){
 
 int main()
 {
-    // Ask user what to do
-       printf(" ---------------------------------------\n");
-      printf("|               Information\t\t|");
+    // Menu utilisateur.
+    printf(" ---------------------------------------\n");
+    printf("|               Information\t\t|");
     printf("\n|    You have %d processors available.\t|  \n|     Except if specified otherwise,\t|\n|        we will now use %d threads.\t|\n",sysconf(_SC_NPROCESSORS_ONLN),sysconf(_SC_NPROCESSORS_ONLN));
     printf(" ---------------------------------------\n");
     int choice=-1;

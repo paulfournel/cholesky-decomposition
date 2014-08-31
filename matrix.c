@@ -96,7 +96,6 @@ Matrix *Matrix_create_orthonormal(int rows){
     double *p=m->data;
     srand(time(NULL));
     int index = 3;
-    printf("index %d\n", index);
     for (i=0;i<d1;i++){
         for (j=0;j<d2;j++){
             if(j==index){
