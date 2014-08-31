@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matrix.h"
-#include "chol.h"
 
 #include <pthread.h>
 #include <stdio.h>
 #include <time.h>
-
 
 void user_input_test(){
     double d;
@@ -71,7 +69,7 @@ void random_matrix_test(){
     printf("\nEnter the size of the matrix?\n");
     printf("\n>: ");
     scanf("%d", &msize);
-    printf("\nMatrix A created:\n");
+    printf("\nMatrice A created:\n");
     Matrix *m1=Matrix_create_random_SDP(msize);//Matrix_create_sample();
     Matrix_dump(m1);
 
@@ -120,53 +118,28 @@ void random_matrix_test(){
     }
 }
 
-void run_cholesky_2(){
-    // Matrices for the program
-	Matrix2 A; // The N x N input matrix
-	Matrix2 reference; // The upper triangular matrix computed by the CPU
-	Matrix2 U_pthreads; // The upper triangular matrix computed by the pthread implementation
-	Matrix2 U_openmp; // The upper triangular matrix computed by the openmp implementation
-
-	// Initialize the random number generator with a seed value
-	srand(time(NULL));
-
-	// Create the positive definite matrix. May require a few tries if we are unlucky
-	int success = 0;
-	while(!success){
-		A = create_positive_definite_matrix(MATRIX_SIZE, MATRIX_SIZE);
-		if(A.elements != NULL)
-				  success = 1;
-	}
-	 print_matrix(A);
-}
-
 void run_speed_test(){
-    int i;
-    for(i=0;i<10;i++){
-        Matrix *m1 = Matrix_create_random_SDP(1400);
-        printf("\nTest on a 200*200 matrix:\n");
+    Matrix *m1 = Matrix_create_random_SDP(200);
 
-        clock_t start = clock(), diff;
-        // Start test
-        Matrix *m2 = cholesky1(m1);
+    clock_t start = clock(), diff;
+    // Start test
+    Matrix *m2 = cholesky1(m1);
 
 
-        diff = clock() - start;
+    diff = clock() - start;
 
-        int msec = diff * 1000 / CLOCKS_PER_SEC;
-        printf("Time taken for the normal algorithm: %d seconds %d milliseconds", msec/1000, msec%1000);
+    int msec = diff * 1000 / CLOCKS_PER_SEC;
+    printf("Time taken %d seconds %d milliseconds", msec/1000, msec%1000);
 
-        clock_t start2 = clock(), diff2;
-        // Start test
-        Matrix *m3 = cholesky2Para(m1);
+    start = clock();
+    // Start test
+    Matrix *m3 = cholesky2Para(m1);
 
 
-        diff2 = clock() - start2;
+    diff = clock() - start;
 
-        int msec2 = diff2 * 1000 / CLOCKS_PER_SEC;
-        printf("\nTime taken for the parallel algorithm: %d seconds %d milliseconds\n", msec2/1000, msec2%1000);
-    }
-    printf("\n***   Conclusion this algorithm is bad   ***\n");
+    msec = diff * 1000 / CLOCKS_PER_SEC;
+    printf("Time taken %d seconds %d milliseconds", msec/1000, msec%1000);
 }
 
 int main()
@@ -174,10 +147,10 @@ int main()
     // Ask user what to do
 
     int choice=-1;
-    while(choice!=5){
+    while(choice!=4){
         printf("\nWhat would you like to do?");
         printf("\n--------------------------");
-        printf("\n\n 1. Enter a 4*4 matrix\n 2. Test with a random matrix\n 3. Run speed comparaison test\n 4. Cholesky2\n 5. Exit\n");
+        printf("\n\n 1. Enter a 4*4 matrix\n 2. Test with a random matrix\n 3. Run speed comparaison test\n 4. Exit\n");
         printf("\n>: ");
         scanf("%d", &choice);
         if(choice==1){
@@ -188,9 +161,6 @@ int main()
         }
         if(choice==3){
             run_speed_test();
-        }
-        if(choice==4){
-            run_cholesky_2();
         }
     }
 
