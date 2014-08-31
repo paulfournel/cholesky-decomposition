@@ -19,9 +19,8 @@ struct arg_struct {
     float *s;
 };
 
-Matrix *cholesky1(Matrix *matOrigin){
+Matrix *cholesky1(Matrix *mat){
     int i,j,k;
-    Matrix *mat = Matrix_clone(matOrigin);
     int n = mat->rows;
     // A faire...
     // Ajouter des tests pour savoir si la matrice est bien SDP
@@ -104,8 +103,9 @@ Matrix *cholesky2Para(Matrix *matOrigin){
             double somme = 0;
             if(i==j){
                 // On lance plusieurs threads
-                pthread_t thread1, thread2;
-
+                //pthread_t threads[threadNumber];
+                pthread_t *threads;
+                threads = (pthread_t*) malloc((threadNumber+1) * sizeof (pthread_t));
                 int tn;
                 // On définit un tableau donc chaque element va être passé en param à un thread
                 struct arg_struct args[threadNumber];
@@ -117,30 +117,32 @@ Matrix *cholesky2Para(Matrix *matOrigin){
                     args[tn].j = j;
                     args[tn].threadNb = tn;
                     args[tn].pas = threadNumber;
+
+                    // On lance les threads.
+                    printf("i=%d",i);
+                    if (pthread_create(&threads[i], NULL, calculSommeDiag, (void *)&args[tn]) != 0) {
+                        printf("error");
+                        return -1;
+                    }
+
                 }
 
-                // On lance les threads.
-                pthread_create (&thread1,  NULL, calculSommeDiag, (void *)&args[0]);
-                pthread_create (&thread2,  NULL, calculSommeDiag, (void *)&args[1]);
-
                 // On attend la fin de tous les threads.
-                // On attend la fin de tous les threads.
-                pthread_join(thread1, NULL);
-                pthread_join(thread2, NULL);
-
-
+                for(tn=0;tn<threadNumber;tn++){
+                    pthread_join(threads[i], NULL);
+                }
                 // On actualise l'élément de la matrice.
 
                 Matrix_set(l,i,j, sqrt(Matrix_get(mat,i,j)-somme));
             }else{
                 // On lance plusieurs threads
                 //pthread_t threads[threadNumber];
-
-                pthread_t thread1, thread2;
+                pthread_t *threads;
+                threads = (pthread_t*) malloc((threadNumber+1) * sizeof (pthread_t));
                 int tn;
                 // On définit un tableau donc chaque element va être passé en param à un thread
-                struct arg_struct args[2];
-                for(tn=0;tn<2;tn++){
+                struct arg_struct args[threadNumber];
+                for(tn=0;tn<threadNumber;tn++){
                     // On initialise les arguments.
                     args[tn].s = &somme;
 
@@ -149,15 +151,17 @@ Matrix *cholesky2Para(Matrix *matOrigin){
                     args[tn].j = j;
                     args[tn].threadNb = tn;
                     args[tn].pas = threadNumber;
+
+                    // On lance les threads.
+                    if (pthread_create(&threads[i], NULL, calculSommeAutre, (void *)&args[tn]) != 0) {
+                        printf("error");
+                        return -1;
+                    }
                 }
-
-                pthread_create (&thread1, NULL, calculSommeAutre, (void *)&args[0]);
-                pthread_create (&thread2, NULL, calculSommeAutre, (void *)&args[1]);
-
                 // On attend la fin de tous les threads.
-                pthread_join(thread1, NULL);
-                pthread_join(thread2, NULL);
-
+                for(tn=0;tn<threadNumber;tn++){
+                    pthread_join(threads[i], NULL);
+                }
                 Matrix_set(l,j,i, (Matrix_get(mat,i,j)-somme)/Matrix_get(l,i,i));
             }
         }
